@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" 
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		contentCreationComplete="contentCreationCompleteHandler(event)"
+		title="HomeView">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.controls.MovieClipSWFLoader;
+			import mx.controls.SWFLoader;
+			import mx.events.FlexEvent;
+			
+			private var swfLoader : MovieClipSWFLoader;
+			private var _paused : Boolean;
+			
+			protected function playSwf():void
+			{
+				loadSwf(swfPath.text);
+				
+			}
+			
+			private function loadSwf(swfPath:String):void 
+			{	
+				swfLoader.autoLoad = true;
+				swfLoader.load("assets/K-4LessonPayoff.swf");
+				swfLoader.addEventListener(Event.COMPLETE,loadComplete);
+			}
+			
+			private function stopSwf():void{
+				if (!_paused) {
+					swfLoader.stop();
+				} else 
+					swfLoader.play();
+				_paused = !_paused;
+			}
+			
+			protected function contentCreationCompleteHandler(event:FlexEvent):void
+			{
+				swfLoader = new MovieClipSWFLoader();
+				swfLoader.percentWidth = 100;
+				swfLoader.maintainAspectRatio = true;
+				swfLoader.load("assets/K-4LessonPayoff.swf");
+				swfContainer.addElement(swfLoader);
+			}
+			
+			protected function loadComplete(event:Event):void
+			{
+				trace("Load Complete");
+				swfLoader.play();
+			}
+			
+		]]>
+	</fx:Script>
+	
+<!--	<mx:SWFLoader x="20" y="100" source="assets/K-4LessonPayoff.swf" id="fileswf" /> -->
+	<s:VGroup>
+		<s:VGroup id="swfContainer">
+		</s:VGroup>
+		<s:HGroup>
+			<s:Button label="Play" click="playSwf()" />
+			<s:ToggleButton label="Pause" click="stopSwf()" />
+		</s:HGroup>
+		<s:HGroup>
+			<s:Label text="Swf File:" />
+			<s:TextInput id="swfPath" text="assets/K-4LessonPayoff.swf" />
+		</s:HGroup>
+		
+	</s:VGroup>
+</s:View>
